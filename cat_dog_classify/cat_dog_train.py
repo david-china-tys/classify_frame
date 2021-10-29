@@ -121,7 +121,7 @@ def inference():
     labels = ['cat', 'dog']
     acc = []
     for i in labels:
-        path = 'data/cat_dog2000/' + i
+        path = 'data/cat_dog/' + i
         img_path = os.listdir(path)
         sum = 0
         for name in tqdm(img_path):
@@ -132,7 +132,7 @@ def inference():
             out = torch.softmax(out, 1)
             _, pred = torch.max(out, 1)
             sum = sum + (labels[pred] == i)
-        acc.append(sum / 1000)
+        acc.append(sum / len(img_path))
 
     for i, j in zip(labels, acc):
         print('{}_acc:{:.2f}'.format(i, j))
@@ -143,10 +143,10 @@ if __name__ == '__main__':
     data_transform = transforms.Compose([
         transforms.Resize([224, 224]),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        transforms.Normalize(mean=[0.5,0.5,0.5], std=[0.5,0.5,0.5])
     ])
 
-    data = datasets.ImageFolder(root='./data/cat_dog2000', transform=data_transform)
+    data = datasets.ImageFolder(root='./data/cat_dog', transform=data_transform)
 
     # 查看类别对应的索引
     print(data.class_to_idx)
